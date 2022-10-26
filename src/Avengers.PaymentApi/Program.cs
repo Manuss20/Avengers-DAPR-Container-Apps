@@ -16,23 +16,22 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-var paymentFaker = new Faker<Mission>()
+var paymentFaker = new Faker<Payment>()
     .StrictMode(true)
-    .RuleFor(m => m.Amount, (f, m) => f.Finance.Amount(1-100000));
+    .RuleFor(m => m.Amount, (f, m) => f.Finance.Amount(1000000, 10000000));
 
 app.MapGet("/payment/{missionId}", (string missionId, IMemoryCache memoryCache) =>
 {
     var memCacheKey = $"{missionId}-payment";
-    int paymentValue = -404;
+    decimal paymentValue = 0;
     
-    if(!memoryCache.TryGetValue(memCacheKey, out inventoryValue))
+    if(!memoryCache.TryGetValue(memCacheKey, out paymentValue))
     {
-        //paymentValue = new Random().Next(1, 100000);
-        paymentValue = paymentFaker;
+        paymentValue = paymentFaker.Generate().Amount;
         memoryCache.Set(memCacheKey, paymentValue);
     }
 
-    paymentValue = memoryCache.Get<int>(memCacheKey);
+    paymentValue = memoryCache.Get<Decimal>(memCacheKey);
 
     return Results.Ok(paymentValue);
 })
@@ -40,3 +39,8 @@ app.MapGet("/payment/{missionId}", (string missionId, IMemoryCache memoryCache) 
 .WithName("GetPayment");
 
 app.Run();
+
+public class Payment
+{
+    public Decimal Amount { get; set; }
+}
