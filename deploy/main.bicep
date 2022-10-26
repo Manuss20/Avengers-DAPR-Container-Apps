@@ -41,9 +41,9 @@ module missions 'container_app.bicep' = {
   params: {
     name: 'missions'
     location: location
+    registryUserName: acr.listCredentials().username
     registryPassword: acr.listCredentials().passwords[0].value
-    registryUsername: acr.listCredentials().username
-    containerAppEnvironmentId: env.outputs.id
+    containerAppEnviromentId: env.outputs.id
     registry: acr.name
     envVars: shared_config
     externalIngress: false
@@ -56,9 +56,9 @@ module payment 'container_app.bicep' = {
   params: {
     name: 'payment'
     location: location
+    registryUserName: acr.listCredentials().username
     registryPassword: acr.listCredentials().passwords[0].value
-    registryUsername: acr.listCredentials().username
-    containerAppEnvironmentId: env.outputs.id
+    containerAppEnviromentId: env.outputs.id
     registry: acr.name
     envVars: shared_config
     externalIngress: false
@@ -71,11 +71,11 @@ module avengers 'container_app.bicep' = {
   params: {
     name: 'avengers'
     location: location
-    registryName: acr.listCredentials().username
+    registryUserName: acr.listCredentials().username
     registryPassword: acr.listCredentials().passwords[0].value
-    containerAppEnviroment: env.outputs.id
+    containerAppEnviromentId: env.outputs.id
     registry: acr.name
-    enVars: shared_config
+    envVars: shared_config
     externalIngress: true
   }
 }
