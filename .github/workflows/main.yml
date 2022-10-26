@@ -1,4 +1,4 @@
-name: Build and deploy .NET application to Azure Container App
+name: Build and deploy .NET applications to Azure Container App
 
 on:
   push:
