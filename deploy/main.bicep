@@ -35,6 +35,36 @@ var shared_config = [
   }
 ]
 
+// Creation of the Azure Container Slot - Missions API
+module missions 'container_app.bicep' = {
+  name: 'missions'
+  params: {
+    name: 'missions'
+    location: location
+    registryPassword: acr.listCredentials().passwords[0].value
+    registryUsername: acr.listCredentials().username
+    containerAppEnvironmentId: env.outputs.id
+    registry: acr.name
+    envVars: shared_config
+    externalIngress: false
+  }
+}
+
+// Creation of the Azure Container Slot - Payment API
+module payment 'container_app.bicep' = {
+  name: 'payment'
+  params: {
+    name: 'payment'
+    location: location
+    registryPassword: acr.listCredentials().passwords[0].value
+    registryUsername: acr.listCredentials().username
+    containerAppEnvironmentId: env.outputs.id
+    registry: acr.name
+    envVars: shared_config
+    externalIngress: false
+  }
+}
+
 // Creation of the Azure Container Slot - Avengers
 module avengers 'container_app.bicep' = {
   name: 'avengers'
