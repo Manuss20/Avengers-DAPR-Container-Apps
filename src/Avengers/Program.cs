@@ -73,7 +73,7 @@ public class AvengerBackendClient : IAvengerBackendClient
 
     public async Task<List<Mission>> GetMissions()
     {
-        var client = _httpClientFactory.CreateClient("Products");
+        var client = _httpClientFactory.CreateClient("Missions");
         return await RestService.For<IAvengerBackendClient>(client).GetMissions();
     }
 }

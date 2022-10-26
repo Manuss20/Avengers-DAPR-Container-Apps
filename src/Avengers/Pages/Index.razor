@@ -1,7 +1,59 @@
 ﻿@page "/"
+@using Microsoft.Extensions.Caching.Memory
+@inject IAvengerBackendClient _avengerBackendClient
+@inject IMemoryCache _memoryCache
 
 <PageTitle>Index</PageTitle>
 
 <h1>Hello, Avenger!</h1>
 
-Welcome to your new app.
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">Mission Id</th>
+            <th scope="col">Status</th>
+            <th scope="col">Amount</th>
+            <th scope="col">Currency</th>
+            <th scope="col">Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var mission in _missions)
+        {
+            <tr>
+                <td>@mission.MissionId</td>
+                <td>@mission.Status</td>
+                <td>@mission.Amount</td>
+                <td>@mission.Currency</td>
+                <td>@mission.Description</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@code
+{
+    List<Mission> _missions = new List<Mission>();
+    bool _shouldRender = false;
+    protected override bool ShouldRender() => _shouldRender;
+    const string cacheKey = "MISSIONS";
+
+    protected override async Task OnInitializedAsync()
+    {
+        Mission[] tmp;
+        if (!_memoryCache.TryGetValue(cacheKey, out tmp))
+        {
+            var missions = await _avengerBackendClient.GetMissions();
+            foreach (var mission in missions)
+            {
+                mission.Amount = await _avengerBackendClient.GetPayment(mission.MissionId);
+            }
+            _missions = missions.ToList();
+            _memoryCache.Set<Mission[]>(cacheKey, _missions.ToArray());
+            tmp = _missions.ToArray();
+        }
+        _missions = tmp.ToList();
+
+        _shouldRender = true;
+    }
+}
