@@ -16,6 +16,12 @@ builder.Services.AddHttpClient("Missions", (httpClient) =>
     httpClient.DefaultRequestHeaders.Add("dapr-app-id", "Missions");
 });
 
+builder.Services.AddHttpClient("Payment", (httpClient) =>
+{
+    httpClient.BaseAddress = new Uri(baseURL);
+    httpClient.DefaultRequestHeaders.Add("dapr-app-id", "Payment");
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -46,6 +52,8 @@ public interface IAvengerBackendClient
     [Get("/missions")]
     Task<List<Mission>> GetMissions();
 
+    [Get("/payment/{missionId}")]
+    Task<Decimal> GetPayment(string missionId);
 }
 
 public class AvengerBackendClient : IAvengerBackendClient
@@ -55,6 +63,12 @@ public class AvengerBackendClient : IAvengerBackendClient
     public AvengerBackendClient(IHttpClientFactory httpClientFactory)
     {
         _httpClientFactory = httpClientFactory;
+    }
+
+    public async Task<Decimal> GetPayment(string missionId)
+    {
+        var client = _httpClientFactory.CreateClient("Payment");
+        return await RestService.For<IAvengerBackendClient>(client).GetPayment(missionId);
     }
 
     public async Task<List<Mission>> GetMissions()

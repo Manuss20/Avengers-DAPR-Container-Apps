@@ -1,13 +1,13 @@
 ﻿{
   "$schema": "https://json.schemastore.org/launchsettings.json",
   "profiles": {
-    "Store.ProductApi": {
+    "Store.InventoryApi": {
       "commandName": "Project",
       "launchUrl": "swagger",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
-      "applicationUrl": "http://localhost:4998",
+      "applicationUrl": "http://localhost:4999",
       "dotnetRunMessages": true
     },
     "Docker": {
