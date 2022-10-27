@@ -9,7 +9,7 @@ COPY ["/src/Monitoring/Monitoring.csproj", "Monitoring/"]
 RUN dotnet restore "src/Avengers/Avengers.csproj"
 
 COPY . .
-WORKDIR "/src/Avengers/"
+WORKDIR "/src/Avengers"
 RUN dotnet build "Avengers.csproj" -c Release -o /app/build
 
 FROM build AS publish

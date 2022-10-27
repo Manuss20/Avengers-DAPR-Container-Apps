@@ -8,7 +8,7 @@ COPY ["/src/Avengers.PaymentApi/Avengers.PaymentApi.csproj", "Avengers.PaymentAp
 COPY ["/src/Monitoring/Monitoring.csproj", "Monitoring/"]
 RUN dotnet restore "Avengers.PaymentApi/Avengers.PaymentApi.csproj"
 COPY . .
-WORKDIR "/src/Avengers.PaymentApi/"
+WORKDIR "/src/Avengers.PaymentApi"
 RUN dotnet build "Avengers.PaymentApi.csproj" -c Release -o /app/build
 
 FROM build AS publish

@@ -8,7 +8,7 @@ COPY ["/src/Avengers.MissionApi/Avengers.MissionApi.csproj", "Avengers.MissionAp
 COPY ["/src/Monitoring/Monitoring.csproj", "Monitoring/"]
 RUN dotnet restore "Avengers.MissionApi/Avengers.MissionApi.csproj"
 COPY . .
-WORKDIR "/src/Avengers.MissionApi/"
+WORKDIR "/src/Avengers.MissionApi"
 RUN dotnet build "Avengers.MissionApi.csproj" -c Release -o /app/build
 
 FROM build AS publish
