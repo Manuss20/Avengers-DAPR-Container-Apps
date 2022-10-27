@@ -4,11 +4,12 @@ EXPOSE 80
 
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
-COPY ["src/Avengers/Avengers.csproj", "Avengers/"]
-COPY ["src/Monitoring/Monitoring.csproj", "Monitoring/"]
+COPY ["/src/Avengers/Avengers.csproj", "Avengers/"]
+COPY ["/src/Monitoring/Monitoring.csproj", "Monitoring/"]
 RUN dotnet restore "src/Avengers/Avengers.csproj"
+
 COPY . .
-WORKDIR "/src/Avengers"
+WORKDIR "/src/Avengers/"
 RUN dotnet build "Avengers.csproj" -c Release -o /app/build
 
 FROM build AS publish

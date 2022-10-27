@@ -40,11 +40,11 @@ app.Run();
 
 public class Mission
 {
-    public string MissionId { get; set; }
-    public string Status { get; set; }
+    public string? MissionId { get; set; }
+    public string? Status { get; set; }
     public Decimal Amount { get; set; }
-    public string Currency { get; set; }
-    public string Description {get; set; }
+    public string? Currency { get; set; }
+    public string? Description {get; set; }
 }
 
 public interface IAvengerBackendClient

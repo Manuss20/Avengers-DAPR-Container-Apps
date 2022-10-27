@@ -18,7 +18,6 @@ var missionsFaker = new Faker<Mission>()
     .StrictMode(true)
     .RuleFor(m => m.Id, (f, m) => f.Database.Random.Guid())
     .RuleFor(m => m.Status, (f, m) => f.Finance.TransactionType())
-    //.RuleFor(m => m.Amount, (f, m) => f.Finance.Amount(1-1000))
     .RuleFor(m => m.Currency, (f, m) => f.Finance.Currency().Symbol)
     .RuleFor(m => m.Description, (f, m) => f.Lorem.Paragraphs(1));
 
@@ -33,9 +32,8 @@ app.Run();
 public class Mission
 {
     public Guid Id => Guid.NewGuid();
-    public string Status { get; set; }
-    //public Decimal Amount { get; set; }
-    public string Currency { get; set; }
-    public string Description {get; set; }
+    public string? Status { get; set; }
+    public string? Currency { get; set; }
+    public string? Description {get; set; }
     
 }
