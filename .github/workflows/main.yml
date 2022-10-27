@@ -73,27 +73,27 @@ jobs:
       run: |
         set -euo pipefail
         access_token=$(az account get-access-token --query accessToken -o tsv)
-        refresh_token=$(curl https://${{ env.RESOURCE_GROUP_NAME }}acr.azurecr.io/oauth2/exchange -v -d "grant_type=access_token&service=${{ env.RESOURCE_GROUP_NAME }}acr.azurecr.io&access_token=$access_token" | jq -r .refresh_token)
-        docker login -u 00000000-0000-0000-0000-000000000000 --password-stdin ${{ env.RESOURCE_GROUP_NAME }}acr.azurecr.io <<< "$refresh_token"
+        refresh_token=$(curl https://${{ env.RESOURCE_GROUP_NAME }}.azurecr.io/oauth2/exchange -v -d "grant_type=access_token&service=${{ env.RESOURCE_GROUP_NAME }}.azurecr.io&access_token=$access_token" | jq -r .refresh_token)
+        docker login -u 00000000-0000-0000-0000-000000000000 --password-stdin ${{ env.RESOURCE_GROUP_NAME }}.azurecr.io <<< "$refresh_token"
     - name: Build the missions api image and push it to ACR
       uses: docker/build-push-action@v2
       with:
         push: true
-        tags: ${{ env.RESOURCE_GROUP_NAME }}acr.azurecr.io/${{ env.MISSION_IMAGE }}:${{ github.sha }}
+        tags: ${{ env.RESOURCE_GROUP_NAME }}azurecr.io/${{ env.MISSION_IMAGE }}:${{ github.sha }}
         file: ${{ env.MISSION_DOCKER }}
 
     - name: Build the payment api image and push it to ACR
       uses: docker/build-push-action@v2
       with:
         push: true
-        tags: ${{ env.RESOURCE_GROUP_NAME }}acr.azurecr.io/${{ env.PAYMENT_IMAGE }}:${{ github.sha }}
+        tags: ${{ env.RESOURCE_GROUP_NAME }}azurecr.io/${{ env.PAYMENT_IMAGE }}:${{ github.sha }}
         file: ${{ env.PAYMENT_DOCKER }}
 
     - name: Build the avengers app frontend image and push it to ACR
       uses: docker/build-push-action@v2
       with:
         push: true
-        tags: ${{ env.RESOURCE_GROUP_NAME }}acr.azurecr.io/${{ env.AVENGERS_IMAGE }}:${{ github.sha }}
+        tags: ${{ env.RESOURCE_GROUP_NAME }}azurecr.io/${{ env.AVENGERS_IMAGE }}:${{ github.sha }}
         file: ${{ env.AVENGERS_DOCKER }}
 
   deploy:
@@ -120,19 +120,19 @@ jobs:
       run: |
         set -euo pipefail
         access_token=$(az account get-access-token --query accessToken -o tsv)
-        refresh_token=$(curl https://${{ env.RESOURCE_GROUP_NAME }}acr.azurecr.io/oauth2/exchange -v -d "grant_type=access_token&service=${{ env.RESOURCE_GROUP_NAME }}acr.azurecr.io&access_token=$access_token" | jq -r .refresh_token)
-        docker login -u 00000000-0000-0000-0000-000000000000 --password-stdin ${{ env.RESOURCE_GROUP_NAME }}acr.azurecr.io <<< "$refresh_token"
+        refresh_token=$(curl https://${{ env.RESOURCE_GROUP_NAME }}azurecr.io/oauth2/exchange -v -d "grant_type=access_token&service=${{ env.RESOURCE_GROUP_NAME }}azurecr.io&access_token=$access_token" | jq -r .refresh_token)
+        docker login -u 00000000-0000-0000-0000-000000000000 --password-stdin ${{ env.RESOURCE_GROUP_NAME }}azurecr.io <<< "$refresh_token"
     - name: Deploy Container Apps
       uses: azure/CLI@v1
       with:
         inlineScript: >
-          az containerapp registry set -n products -g ${{ env.RESOURCE_GROUP_NAME }} --server ${{ env.RESOURCE_GROUP_NAME }}acr.azurecr.io
-          az containerapp update -n products -g ${{ env.RESOURCE_GROUP_NAME }} -i ${{ env.RESOURCE_GROUP_NAME }}acr.azurecr.io/${{ env.PRODUCTS_IMAGE }}:${{ github.sha }}
-          az containerapp registry set -n inventory -g ${{ env.RESOURCE_GROUP_NAME }} --server ${{ env.RESOURCE_GROUP_NAME }}acr.azurecr.io
-          az containerapp update -n inventory -g ${{ env.RESOURCE_GROUP_NAME }} -i ${{ env.RESOURCE_GROUP_NAME }}acr.azurecr.io/${{ env.INVENTORY_IMAGE }}:${{ github.sha }}
-          az containerapp registry set -n store -g ${{ env.RESOURCE_GROUP_NAME }} --server ${{ env.RESOURCE_GROUP_NAME }}acr.azurecr.io
+          az containerapp registry set -n products -g ${{ env.RESOURCE_GROUP_NAME }} --server ${{ env.RESOURCE_GROUP_NAME }}.azurecr.io
+          az containerapp update -n products -g ${{ env.RESOURCE_GROUP_NAME }} -i ${{ env.RESOURCE_GROUP_NAME }}.azurecr.io/${{ env.PRODUCTS_IMAGE }}:${{ github.sha }}
+          az containerapp registry set -n inventory -g ${{ env.RESOURCE_GROUP_NAME }} --server ${{ env.RESOURCE_GROUP_NAME }}.azurecr.io
+          az containerapp update -n inventory -g ${{ env.RESOURCE_GROUP_NAME }} -i ${{ env.RESOURCE_GROUP_NAME }}.azurecr.io/${{ env.INVENTORY_IMAGE }}:${{ github.sha }}
+          az containerapp registry set -n store -g ${{ env.RESOURCE_GROUP_NAME }} --server ${{ env.RESOURCE_GROUP_NAME }}.azurecr.io
           
-          az containerapp update -n store -g ${{ env.RESOURCE_GROUP_NAME }} -i ${{ env.RESOURCE_GROUP_NAME }}acr.azurecr.io/${{ env.STORE_IMAGE }}:${{ github.sha }}
+          az containerapp update -n store -g ${{ env.RESOURCE_GROUP_NAME }} -i ${{ env.RESOURCE_GROUP_NAME }}.azurecr.io/${{ env.STORE_IMAGE }}:${{ github.sha }}
     - name: logout
       run: >
         az logout
