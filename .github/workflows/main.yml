@@ -3,7 +3,7 @@ name: Build and deploy .NET application to Azure Container App
 on:
   push:
     branches:
-    - deploy
+    - main
 
 env:
   
