@@ -50,7 +50,6 @@ jobs:
       with:
         resourceGroupName: ${{ env.RESOURCE_GROUP_NAME }}
         template: ./deploy/main.bicep
-        parameters: 'storagePrefix=mystore storageSKU=Standard_LRS'
         failOnStdErr: false
         
   build:
