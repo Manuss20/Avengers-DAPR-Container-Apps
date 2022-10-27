@@ -1,0 +1,37 @@
+version: "3.9"
+
+networks:
+    avengers.services.network:
+        driver: bridge
+
+services:
+
+    avengers.services.missionsapi:
+        container_name: Avengers.MissionApi
+        build:
+          context: ./
+          dockerfile: ./src/Avengers.MissionApi/Dockerfile
+        ports:
+            - "4998:80"
+        networks:
+            - avengers.services.network
+
+    avengers.services.paymentapi:
+        container_name: Avengers.PaymentApi
+        build:
+          context: ./
+          dockerfile: ./src/Avengers.PaymentApi/Dockerfile
+        ports:
+            - "4999:80"
+        networks:
+            - avengers.services.network
+
+    avengers.services.web:
+        container_name: Avengers.Web
+        build:
+          context: ./
+          dockerfile: ./src/Avengers/Dockerfile
+        ports:
+            - "5000:80"
+        networks:
+            - avengers.services.network
