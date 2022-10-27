@@ -38,10 +38,12 @@ jobs:
 
     - name: Create resource group
       uses: azure/CLI@v1
-      run: |
-        echo "Creating resource group in Azure"
-        echo "Executing 'az group create -l ${{ env.REGION }} -n ${{ env.RESOURCE_GROUP_NAME }}'"
-        az group create -l ${{ env.REGION }} -n ${{ env.RESOURCE_GROUP_NAME }}
+      with:
+        azcliversion: 2.30.0
+        inlineScript: |
+          echo "Creating resource group in Azure"
+          echo "Executing 'az group create -l ${{ env.REGION }} -n ${{ env.RESOURCE_GROUP_NAME }}'"
+          az group create -l ${{ env.REGION }} -n ${{ env.RESOURCE_GROUP_NAME }}
 
     - name: Creating resources
       uses: azure/arm-deploy@v1
