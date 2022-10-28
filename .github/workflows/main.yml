@@ -8,7 +8,7 @@ on:
 env:
   
   # alphanumeric string under 14 characters
-  RESOURCE_GROUP_NAME: avgdemotests15
+  RESOURCE_GROUP_NAME: avgdemotests16
 
   # specify your preferred region
   REGION: westeurope
@@ -126,16 +126,23 @@ jobs:
         access_token=$(az account get-access-token --query accessToken -o tsv)
         refresh_token=$(curl https://${{ env.RESOURCE_GROUP_NAME }}.azurecr.io/oauth2/exchange -v -d "grant_type=access_token&service=${{ env.RESOURCE_GROUP_NAME }}.azurecr.io&access_token=$access_token" | jq -r .refresh_token)
         docker login -u 00000000-0000-0000-0000-000000000000 --password-stdin ${{ env.RESOURCE_GROUP_NAME }}.azurecr.io <<< "$refresh_token"
+
     - name: Deploy Container Apps
       uses: azure/CLI@v1
       with:
         inlineScript: >
           az containerapp registry set -n missions -g ${{ env.RESOURCE_GROUP_NAME }} --server ${{ env.RESOURCE_GROUP_NAME }}.azurecr.io
+
           az containerapp update -n missions -g ${{ env.RESOURCE_GROUP_NAME }} -i ${{ env.RESOURCE_GROUP_NAME }}.azurecr.io/${{ env.MISSION_IMAGE }}:${{ github.sha }}
+
           az containerapp registry set -n payment -g ${{ env.RESOURCE_GROUP_NAME }} --server ${{ env.RESOURCE_GROUP_NAME }}.azurecr.io
+
           az containerapp update -n payment -g ${{ env.RESOURCE_GROUP_NAME }} -i ${{ env.RESOURCE_GROUP_NAME }}.azurecr.io/${{ env.PAYMENT_IMAGE }}:${{ github.sha }}
+
           az containerapp registry set -n avengers -g ${{ env.RESOURCE_GROUP_NAME }} --server ${{ env.RESOURCE_GROUP_NAME }}.azurecr.io
+
           az containerapp update -n avengers -g ${{ env.RESOURCE_GROUP_NAME }} -i ${{ env.RESOURCE_GROUP_NAME }}.azurecr.io/${{ env.AVENGERS_IMAGE }}:${{ github.sha }}
+
     - name: logout
       run: >
         az logout
