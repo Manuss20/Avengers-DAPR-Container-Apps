@@ -8,7 +8,7 @@ on:
 env:
   
   # alphanumeric string under 14 characters
-  RESOURCE_GROUP_NAME: avgdemotests16
+  RESOURCE_GROUP_NAME: avgdemotests18
 
   # specify your preferred region
   REGION: westeurope
@@ -130,6 +130,7 @@ jobs:
     - name: Deploy Container Apps
       uses: azure/CLI@v1
       with:
+        azcliversion: 2.36.0
         inlineScript: >
           az containerapp registry set -n missions -g ${{ env.RESOURCE_GROUP_NAME }} --server ${{ env.RESOURCE_GROUP_NAME }}.azurecr.io
 
