@@ -8,7 +8,7 @@ on:
 env:
   
   # alphanumeric string under 14 characters
-  RESOURCE_GROUP_NAME: avgdemotests10
+  RESOURCE_GROUP_NAME: avgdemotests11
 
   # specify your preferred region
   REGION: westeurope
@@ -81,21 +81,21 @@ jobs:
       with:
         push: true
         file: ${{ env.MISSION_DOCKER }}
-        tags: ${{ env.RESOURCE_GROUP_NAME }}azurecr.io/${{ env.MISSION_IMAGE }}:latest
+        tags: ${{ env.RESOURCE_GROUP_NAME }}.azurecr.io/${{ env.MISSION_IMAGE }}:latest
         
 
     - name: Build the payment api image and push it to ACR
       uses: docker/build-push-action@v2
       with:
         push: true
-        tags: ${{ env.RESOURCE_GROUP_NAME }}azurecr.io/${{ env.PAYMENT_IMAGE }}:latest
+        tags: ${{ env.RESOURCE_GROUP_NAME }}.azurecr.io/${{ env.PAYMENT_IMAGE }}:latest
         file: ${{ env.PAYMENT_DOCKER }}
 
     - name: Build the avengers app frontend image and push it to ACR
       uses: docker/build-push-action@v2
       with:
         push: true
-        tags: ${{ env.RESOURCE_GROUP_NAME }}azurecr.io/${{ env.AVENGERS_IMAGE }}:latest
+        tags: ${{ env.RESOURCE_GROUP_NAME }}.azurecr.io/${{ env.AVENGERS_IMAGE }}:latest
         file: ${{ env.AVENGERS_DOCKER }}
 
   deploy:
