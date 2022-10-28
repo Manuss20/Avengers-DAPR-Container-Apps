@@ -137,10 +137,10 @@ jobs:
 
           az containerapp registry set -n payment -g ${{ env.RESOURCE_GROUP_NAME }} --server ${{ env.RESOURCE_GROUP_NAME }}.azurecr.io
 
-          az containerapp update -n payment -g ${{ env.RESOURCE_GROUP_NAME }} -i ${{ env.RESOURCE_GROUP_NAME }}.azurecr.io/${{ env.PAYMENT_IMAGE }}:${{ github.sha }}
+          az containerapp update -n payment -g ${{ env.RESOURCE_GROUP_NAME }} -i ${{ env.RESOURCE_GROUP_NAME }}.azurecr.io/${{ env.INVENTORY_IMAGE }}:${{ github.sha }}
 
           az containerapp registry set -n avengers -g ${{ env.RESOURCE_GROUP_NAME }} --server ${{ env.RESOURCE_GROUP_NAME }}.azurecr.io
-
+          
           az containerapp update -n avengers -g ${{ env.RESOURCE_GROUP_NAME }} -i ${{ env.RESOURCE_GROUP_NAME }}.azurecr.io/${{ env.AVENGERS_IMAGE }}:${{ github.sha }}
 
     - name: logout
