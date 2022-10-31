@@ -1,6 +1,6 @@
 {
   "profiles": {
-    "Store": {
+    "Avengers": {
       "commandName": "Project",
       "launchBrowser": true,
       "environmentVariables": {
