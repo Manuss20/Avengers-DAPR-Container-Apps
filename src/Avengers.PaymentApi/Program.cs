@@ -20,7 +20,7 @@ var paymentFaker = new Faker<Payment>()
     .StrictMode(true)
     .RuleFor(m => m.Amount, (f, m) => f.Finance.Amount(1000000, 10000000));
 
-app.MapGet("/payment/{missionId}", (string missionId, IMemoryCache memoryCache) =>
+app.MapGet("/payment/{missionId}", (Guid missionId, IMemoryCache memoryCache) =>
 {
     var memCacheKey = $"{missionId}-payment";
     decimal paymentValue = 0;

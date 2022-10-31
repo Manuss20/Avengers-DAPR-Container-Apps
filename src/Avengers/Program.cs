@@ -40,7 +40,7 @@ app.Run();
 
 public class Mission
 {
-    public string? MissionId { get; set; }
+    public Guid Id { get; set; }
     public string? Status { get; set; }
     public Decimal Amount { get; set; }
     public string? Currency { get; set; }
@@ -53,7 +53,7 @@ public interface IAvengerBackendClient
     Task<List<Mission>> GetMissions();
 
     [Get("/payment/{missionId}")]
-    Task<Decimal> GetPayment(string missionId);
+    Task<Decimal> GetPayment(Guid missionId);
 }
 
 public class AvengerBackendClient : IAvengerBackendClient
@@ -65,7 +65,7 @@ public class AvengerBackendClient : IAvengerBackendClient
         _httpClientFactory = httpClientFactory;
     }
 
-    public async Task<Decimal> GetPayment(string missionId)
+    public async Task<Decimal> GetPayment(Guid missionId)
     {
         var client = _httpClientFactory.CreateClient("Payment");
         return await RestService.For<IAvengerBackendClient>(client).GetPayment(missionId);
