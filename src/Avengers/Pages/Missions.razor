@@ -15,7 +15,8 @@
     <thead>
         <tr>
             <th scope="col">Id</th>
-            <th scope="col">Status</th>
+            <th scope="col">Progress</th>
+            <th scope="col">Payment Status</th>
             <th scope="col">Amount</th>
             <th scope="col">Currency</th>
             <th scope="col">Description</th>
@@ -27,6 +28,7 @@
             <tr>
                 <td>@mission.Id</td>
                 <td>@mission.Status</td>
+                <td>@mission.PaymentStatus</td>
                 <td>@mission.Amount</td>
                 <td>@mission.Currency</td>
                 <td>@mission.Description</td>
@@ -51,6 +53,12 @@
             foreach (var mission in missions)
             {
                 mission.Amount = await _avengerBackendClient.GetPayment(mission.Id);
+                
+                if (mission.Status == "Canceled")
+                {
+                    mission.Amount = decimal.Negate(mission.Amount);
+                }
+                
             }
             _missions = missions.ToList();
             _memoryCache.Set<Mission[]>(cacheKey, _missions.ToArray());

@@ -42,6 +42,7 @@ public class Mission
 {
     public Guid Id { get; set; }
     public string? Status { get; set; }
+    public string? PaymentStatus { get; set; }
     public Decimal Amount { get; set; }
     public string? Currency { get; set; }
     public string? Description {get; set; }
