@@ -3,12 +3,12 @@ name: Build and deploy .NET application to Azure Container App
 on:
   push:
     branches:
-    - main
+    - deploy
 
 env:
   
   # alphanumeric string under 14 characters
-  RESOURCE_GROUP_NAME: avengertest10
+  RESOURCE_GROUP_NAME: avengerdemotest1
 
   # specify your preferred region
   REGION: westeurope

@@ -2,13 +2,10 @@
 
 int clientNumber = 0;
 
-
 Console.WriteLine("Massive client conections in C#");
 Console.WriteLine("--------------------------------");
 Console.WriteLine("Enter the number of clients to connect to the web");
 clientNumber = Convert.ToInt32(Console.ReadLine());
-
-
 
 var recurisveClient = new CustomClients();
 recurisveClient.GetInParallel(clientNumber);
@@ -21,16 +18,6 @@ while (exit)
     Task.Delay(5 * 1000).ContinueWith(t => Console.WriteLine(" ----- Starting new clients ----"));
     Task.Delay(5 * 1000).ContinueWith(t => recurisveClient.GetInParallel(clientNumber));
 }
-
-
-
-
-
-
-
-
-
-
 
 public class CustomClients
 {
@@ -46,8 +33,7 @@ public class CustomClients
     {
         Console.WriteLine("Calling client {0}", ids + 1);
 
-        //var url = "https://avengers.redglacier-bf373bf2.westeurope.azurecontainerapps.io/missions";
-        var url = "https://stackoverflow.com/questions/13740629/how-do-i-trigger-a-method-to-run-after-x-seconds";
+        var url = "https://avengers.kindsea-ad48aa1f.westeurope.azurecontainerapps.io/missions";
 
         var response = await client
             .GetAsync(url)
