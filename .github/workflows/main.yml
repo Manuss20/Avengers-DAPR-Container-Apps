@@ -1,9 +1,9 @@
-name: Build and deploy .NET application to Azure Container App
+name: Build and deploy .NET application to Azure Container Apps
 
 on:
   push:
     branches:
-    - deploy
+    - main
 
 env:
   
