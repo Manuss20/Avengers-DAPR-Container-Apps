@@ -1,4 +1,5 @@
 using Refit;
+using Dapr.Client;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -6,21 +7,11 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddScoped<IAvengerBackendClient, AvengerBackendClient>();
-builder.Services.AddMemoryCache();
 builder.Services.AddApplicationMonitoring();
 
 var baseURL = (Environment.GetEnvironmentVariable("BASE_URL") ?? "http://localhost") + ":" + (Environment.GetEnvironmentVariable("DAPR_HTTP_PORT") ?? "3500");
-builder.Services.AddHttpClient("Missions", (httpClient) =>
-{
-    httpClient.BaseAddress = new Uri(baseURL);
-    httpClient.DefaultRequestHeaders.Add("dapr-app-id", "Missions");
-});
 
-builder.Services.AddHttpClient("Payment", (httpClient) =>
-{
-    httpClient.BaseAddress = new Uri(baseURL);
-    httpClient.DefaultRequestHeaders.Add("dapr-app-id", "Payment");
-});
+builder.Services.AddDaprClient();
 
 var app = builder.Build();
 
@@ -59,22 +50,21 @@ public interface IAvengerBackendClient
 
 public class AvengerBackendClient : IAvengerBackendClient
 {
-    IHttpClientFactory _httpClientFactory;
+    DaprClient _daprClient;
 
-    public AvengerBackendClient(IHttpClientFactory httpClientFactory)
+    public AvengerBackendClient(DaprClient daprClient)
     {
-        _httpClientFactory = httpClientFactory;
+        //_httpClientFactory = httpClientFactory;
+        _daprClient = daprClient;
     }
 
     public async Task<Decimal> GetPayment(Guid missionId)
     {
-        var client = _httpClientFactory.CreateClient("Payment");
-        return await RestService.For<IAvengerBackendClient>(client).GetPayment(missionId);
-    }
+        return await _daprClient.InvokeMethodAsync<Decimal>(HttpMethod.Get, "Payment", "payment/" + missionId.ToString());
+    }   
 
     public async Task<List<Mission>> GetMissions()
     {
-        var client = _httpClientFactory.CreateClient("Missions");
-        return await RestService.For<IAvengerBackendClient>(client).GetMissions();
+        return await _daprClient.InvokeMethodAsync<List<Mission>>(HttpMethod.Get, "Missions", "missions");
     }
 }

@@ -33,7 +33,7 @@ public class CustomClients
     {
         Console.WriteLine("Calling client {0}", ids + 1);
 
-        var url = "https://avengers.kindsea-ad48aa1f.westeurope.azurecontainerapps.io/missions";
+        var url = "http://localhost:5000/missions";
 
         var response = await client
             .GetAsync(url)

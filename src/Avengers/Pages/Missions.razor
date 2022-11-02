@@ -1,7 +1,5 @@
 @page "/missions"
-@using Microsoft.Extensions.Caching.Memory
 @inject IAvengerBackendClient _avengerBackendClient
-@inject IMemoryCache _memoryCache
 
 <PageTitle>Index</PageTitle>
 
@@ -46,26 +44,18 @@
 
     protected override async Task OnInitializedAsync()
     {
-        Mission[] tmp;
-        if (!_memoryCache.TryGetValue(cacheKey, out tmp))
+        var missions = await _avengerBackendClient.GetMissions();
+        foreach (var mission in missions)
         {
-            var missions = await _avengerBackendClient.GetMissions();
-            foreach (var mission in missions)
+            mission.Amount = await _avengerBackendClient.GetPayment(mission.Id);
+            
+            if (mission.Status == "Canceled")
             {
-                mission.Amount = await _avengerBackendClient.GetPayment(mission.Id);
-                
-                if (mission.Status == "Canceled")
-                {
-                    mission.Amount = decimal.Negate(mission.Amount);
-                }
-                
+                mission.Amount = decimal.Negate(mission.Amount);
             }
-            _missions = missions.ToList();
-            _memoryCache.Set<Mission[]>(cacheKey, _missions.ToArray());
-            tmp = _missions.ToArray();
+            
         }
-        _missions = tmp.ToList();
-
+        _missions = missions.ToList();
         _shouldRender = true;
     }
 }
