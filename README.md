@@ -7,3 +7,5 @@
 <code>dapr run --app-id Missions --app-port 4998 --dapr-http-port 3501 dotnet run</code>
 
 <code>dapr run --app-id Payment --app-port 4999 --dapr-http-port 3502 dotnet run</code>
+
+<code>dapr run -a avengers dotnet watch run</code>

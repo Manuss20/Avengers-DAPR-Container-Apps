@@ -29,10 +29,11 @@ var missionsFaker = new Faker<Mission>()
     .RuleFor(m => m.Description, (f, m) => f.Lorem.Paragraphs(1));
 
 var genmissions = missionsFaker.Generate(10);
+string DAPR_STORE_NAME = "statestore";
 
 app.MapGet("/missions", async () =>
 {
-    await dapr.GetStateAsync<Mission[]>("statestore", "missions");
+    await dapr.GetStateAsync<Mission[]>(DAPR_STORE_NAME, "missions");
     return Results.Accepted("/missions", genmissions);
 } )
     .Produces<Mission[]>(StatusCodes.Status200OK)
@@ -40,7 +41,7 @@ app.MapGet("/missions", async () =>
 
 app.MapPost("/missions" , async (Mission mission) => 
 {
-    await dapr.SaveStateAsync("statestore", "missions", genmissions);
+    await dapr.SaveStateAsync(DAPR_STORE_NAME, "missions", genmissions);
     return Results.Accepted("/missions", genmissions);
 }).WithTopic("pubsub", "missions");
 

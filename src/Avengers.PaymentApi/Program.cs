@@ -23,18 +23,20 @@ var paymentFaker = new Faker<Payment>()
     .StrictMode(true)
     .RuleFor(m => m.Amount, (f, m) => f.Finance.Amount(1000000, 10000000));
 
+var payment = paymentFaker.Generate().Amount;
+
+string DAPR_STORE_NAME = "statestore";
 
 app.MapGet("/payment/{missionId}", async (Guid missionId) =>
 {
-    var payment = paymentFaker.Generate().Amount;
-    await dapr.SaveStateAsync("statestore", $"payment-{missionId}", payment);
+    await dapr.GetStateAsync<decimal>(DAPR_STORE_NAME, $"payment-{missionId}");
     return Results.Accepted("/payment", payment);
+
 }).WithTopic("pubsub", "payment");
 
 app.MapPost("/payment/{missionId}", async (Guid missionId) =>
 {
-    var payment = paymentFaker.Generate().Amount;
-    await dapr.SaveStateAsync("statestore", $"payment-{missionId}", payment);
+    await dapr.SaveStateAsync(DAPR_STORE_NAME, $"payment-{missionId}", payment);
     return Results.Accepted("/payment", payment);
 }).WithTopic("pubsub", "payment");
 
