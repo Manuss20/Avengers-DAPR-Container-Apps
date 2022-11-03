@@ -1,4 +1,5 @@
 using Bogus;
+using Dapr.Client;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddEndpointsApiExplorer();
@@ -14,6 +15,9 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseCloudEvents();
+
+var dapr = new DaprClientBuilder().Build();
 var statusprogess = new[] { "Completed", "In progress", "Canceled"};
 
 var missionsFaker = new Faker<Mission>()
@@ -24,11 +28,21 @@ var missionsFaker = new Faker<Mission>()
     .RuleFor(m => m.Currency, (f, m) => f.Finance.Currency().Symbol)
     .RuleFor(m => m.Description, (f, m) => f.Lorem.Paragraphs(1));
 
-var missions = missionsFaker.Generate(10);
+var genmissions = missionsFaker.Generate(10);
 
-app.MapGet("/missions", () => Results.Ok(missions))
+app.MapGet("/missions", async () =>
+{
+    await dapr.GetStateAsync<Mission[]>("statestore", "missions");
+    return Results.Accepted("/missions", genmissions);
+} )
     .Produces<Mission[]>(StatusCodes.Status200OK)
     .WithName("GetMissions");
+
+app.MapPost("/missions" , async (Mission mission) => 
+{
+    await dapr.SaveStateAsync("statestore", "missions", genmissions);
+    return Results.Accepted("/missions", genmissions);
+}).WithTopic("pubsub", "missions");
 
 app.Run();
 
