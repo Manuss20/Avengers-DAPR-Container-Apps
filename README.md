@@ -1,4 +1,4 @@
-# Avengers-DARP-Container-Apps
+# Avengers-Dapr-Container-Apps
 
 <p>Avengers Mission Control Sample Application.</p>
 
