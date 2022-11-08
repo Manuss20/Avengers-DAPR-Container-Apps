@@ -28,22 +28,17 @@ var missionsFaker = new Faker<Mission>()
     .RuleFor(m => m.Currency, (f, m) => f.Finance.Currency().Symbol)
     .RuleFor(m => m.Description, (f, m) => f.Lorem.Paragraphs(1));
 
-
-string DAPR_STORE_NAME = "statestore";
-
-app.MapGet("/missions", async () =>
+app.MapGet("/missions",  () =>
 {
     var genmissions = missionsFaker.Generate(10);
-    await dapr.GetStateAsync<Mission[]>(DAPR_STORE_NAME, "missions");
     return Results.Accepted("/missions", genmissions);
 } )
     .Produces<Mission[]>(StatusCodes.Status200OK)
     .WithName("GetMissions");
 
-app.MapPost("/missions" , async (Mission mission) => 
+app.MapPost("/missions" ,  (Mission mission) => 
 {
     var genmissions = missionsFaker.Generate(10);
-    await dapr.SaveStateAsync(DAPR_STORE_NAME, "missions", genmissions);
     return Results.Accepted("/missions", genmissions);
 }).WithTopic("pubsub", "missions");
 

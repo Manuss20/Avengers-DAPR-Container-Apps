@@ -1,81 +1,20 @@
-﻿// See https://aka.ms/new-console-template for more information
+﻿using Dapr.Client;
 
-int clientNumber = 0;
+for (int i = 1; i <= 10; i++) {
+    using var client = new DaprClientBuilder().Build();
+    await client.InvokeMethodAsync<List<Mission>>(HttpMethod.Get, "Missions", "missions");
+    await client.InvokeMethodAsync<string, Decimal>(HttpMethod.Get, "Payment", "payment/", Guid.NewGuid().ToString());
 
-Console.WriteLine("Massive client conections in C#");
-Console.WriteLine("--------------------------------");
-Console.WriteLine("Enter the number of clients to connect to the web");
-clientNumber = Convert.ToInt32(Console.ReadLine());
-
-var recurisveClient = new CustomClients();
-recurisveClient.GetInParallel(clientNumber);
-
-bool exit = true;
-
-while (exit)
-{
-
-    Task.Delay(5 * 1000).ContinueWith(t => Console.WriteLine(" ----- Starting new clients ----"));
-    Task.Delay(5 * 1000).ContinueWith(t => recurisveClient.GetInParallel(clientNumber));
+    Console.WriteLine("Published data: ");
+    await Task.Delay(TimeSpan.FromSeconds(1));
 }
 
-public class CustomClients
+public class Mission
 {
-
-    private HttpClient client;
-
-    public CustomClients()
-    {
-        client = new HttpClient();               
-    }
-        
-    public async Task<string> CallWeb(int ids)
-    {
-        Console.WriteLine("Calling client {0}", ids + 1);
-
-        var url = "http://localhost:5000/missions";
-
-        var response = await client
-            .GetAsync(url)
-            .ConfigureAwait(false);
-
-        var res = await response.Content.ReadAsStringAsync();
-
-       
-
-        Console.WriteLine("Response client {0}", ids + 1 );
-
-        return res;
-    }
-
-    public async void GetInParallel(int clientNumbers)
-    {
-        var tasks = new List<Task<string>>();
-
-        for (int i = 0; i < clientNumbers; i++)
-        {
-            tasks.Add(CallWeb(i));
-        }
-
-        var results = await Task.WhenAll(tasks);
-        
-    }
-
+    public Guid Id { get; set; }
+    public string? Status { get; set; }
+    public string? PaymentStatus { get; set; }
+    public Decimal Amount { get; set; }
+    public string? Currency { get; set; }
+    public string? Description { get; set; }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
