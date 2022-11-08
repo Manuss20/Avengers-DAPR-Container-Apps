@@ -56,7 +56,7 @@ public class AvengerBackendClient : IAvengerBackendClient
 
     public async Task<Decimal> GetPayment(Guid missionId)
     {
-        return await _daprClient.InvokeMethodAsync<Guid, Decimal>(HttpMethod.Get, "Payment", "payment", missionId);
+        return await _daprClient.InvokeMethodAsync<Guid, Decimal>(HttpMethod.Get, "Payment", "payment/" + missionId.ToString());
     }
 
     public async Task<List<Mission>> GetMissions()
