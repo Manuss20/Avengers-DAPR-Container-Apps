@@ -8,7 +8,7 @@ on:
 env:
   
   # alphanumeric string under 14 characters
-  RESOURCE_GROUP_NAME: avgdevnetcorebcn
+  RESOURCE_GROUP_NAME: avengersmadnet22
 
   # specify your preferred region
   REGION: westeurope
@@ -121,16 +121,14 @@ jobs:
           az extension add --name containerapp --yes
 
     - name: Login to ACR
-      run: |
-        set -euo pipefail
-        access_token=$(az account get-access-token --query accessToken -o tsv)
-        refresh_token=$(curl https://${{ env.RESOURCE_GROUP_NAME }}.azurecr.io/oauth2/exchange -v -d "grant_type=access_token&service=${{ env.RESOURCE_GROUP_NAME }}.azurecr.io&access_token=$access_token" | jq -r .refresh_token)
-        docker login -u 00000000-0000-0000-0000-000000000000 --password-stdin ${{ env.RESOURCE_GROUP_NAME }}.azurecr.io <<< "$refresh_token"
+      uses: azure/CLI@v1
+      with:
+        inlineScript: >
+          az acr login --name ${{ env.RESOURCE_GROUP_NAME }}
 
     - name: Deploy Container Apps
       uses: azure/CLI@v1
       with:
-        azcliversion: 2.36.0
         inlineScript: >
           az containerapp registry set -n missions -g ${{ env.RESOURCE_GROUP_NAME }} --server ${{ env.RESOURCE_GROUP_NAME }}.azurecr.io
 
