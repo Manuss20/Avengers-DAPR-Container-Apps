@@ -9,7 +9,7 @@ on:
 env:
   
   # alphanumeric string under 14 characters
-  RESOURCE_GROUP_NAME: avgstestng03
+  RESOURCE_GROUP_NAME: avgstestng04
 
   # specify your preferred region
   REGION: westeurope
@@ -114,9 +114,7 @@ jobs:
         creds: ${{ secrets.AzureSPN }}
 
     - name: Installing Container Apps extension
-      uses: azure/CLI@v1
-      with:
-        inlineScript: >
+      run: |
           az config set extension.use_dynamic_install=yes_without_prompt
 
           az extension add --name containerapp --yes
@@ -128,9 +126,7 @@ jobs:
           docker login ${{ env.RESOURCE_GROUP_NAME }}.azurecr.io --username 00000000-0000-0000-0000-000000000000 --password $token
 
     - name: Deploy Container Apps
-      uses: azure/CLI@v1
-      with:
-        inlineScript: >
+      run: |
           az containerapp registry set -n missions -g ${{ env.RESOURCE_GROUP_NAME }} --server ${{ env.RESOURCE_GROUP_NAME }}.azurecr.io
 
           az containerapp update -n missions -g ${{ env.RESOURCE_GROUP_NAME }} -i ${{ env.RESOURCE_GROUP_NAME }}.azurecr.io/${{ env.MISSION_IMAGE }}:${{ github.sha }}
