@@ -9,7 +9,7 @@ on:
 env:
   
   # alphanumeric string under 14 characters
-  RESOURCE_GROUP_NAME: avgstestng01
+  RESOURCE_GROUP_NAME: avgstestng02
 
   # specify your preferred region
   REGION: westeurope
@@ -126,6 +126,7 @@ jobs:
       with:
         inlineScript: >
           token=$(az acr login --name ${{ env.RESOURCE_GROUP_NAME }} --expose-token --output tsv --query accessToken)
+
           docker login ${{ env.RESOURCE_GROUP_NAME }}.azurecr.io --username 00000000-0000-0000-0000-000000000000 --password $token
 
     - name: Deploy Container Apps
