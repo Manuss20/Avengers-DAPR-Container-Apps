@@ -9,7 +9,7 @@ on:
 env:
   
   # alphanumeric string under 14 characters
-  RESOURCE_GROUP_NAME: avgstestng22
+  RESOURCE_GROUP_NAME: avgstestng24
 
   # specify your preferred region
   REGION: westeurope
