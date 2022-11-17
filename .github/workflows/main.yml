@@ -8,7 +8,7 @@ on:
 
 env:
   # alphanumeric string under 14 characters
-  RESOURCE_GROUP_NAME: cfmavengsrstst100
+  RESOURCE_GROUP_NAME: avengersdemom
 
   # specify your preferred region
   REGION: westeurope
