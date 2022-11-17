@@ -33,10 +33,6 @@ resource containerApp 'Microsoft.App/containerApps@2022-03-01' = {
       }
       activeRevisionsMode: 'single'
       secrets: [
-        {
-          name: 'container-registry-password'
-          value: registryPassword
-        }
       ]
       registries: [
         {
