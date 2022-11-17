@@ -8,7 +8,7 @@ on:
 env:
   
   # alphanumeric string under 14 characters
-  RESOURCE_GROUP_NAME: avengersdnmad
+  RESOURCE_GROUP_NAME: avengersdemom
 
   # specify your preferred region
   REGION: westeurope
@@ -131,17 +131,17 @@ jobs:
       uses: azure/CLI@v1
       with:
         inlineScript: >
-          az containerapp registry set -n products -g ${{ env.RESOURCE_GROUP_NAME }} --server ${{ env.RESOURCE_GROUP_NAME }}.azurecr.io
+          az containerapp registry set -n ${{ env.MISSION_IMAGE }} -g ${{ env.RESOURCE_GROUP_NAME }} --server ${{ env.RESOURCE_GROUP_NAME }}.azurecr.io
           
-          az containerapp update -n products -g ${{ env.RESOURCE_GROUP_NAME }} -i ${{ env.RESOURCE_GROUP_NAME }}.azurecr.io/${{ env.MISSION_IMAGE }}:${{ github.sha }}
+          az containerapp update -n ${{ env.MISSION_IMAGE }} -g ${{ env.RESOURCE_GROUP_NAME }} -i ${{ env.RESOURCE_GROUP_NAME }}.azurecr.io/${{ env.MISSION_IMAGE }}:${{ github.sha }}
           
-          az containerapp registry set -n inventory -g ${{ env.RESOURCE_GROUP_NAME }} --server ${{ env.RESOURCE_GROUP_NAME }}.azurecr.io
+          az containerapp registry set -n ${{ env.PAYMENT_IMAGE }} -g ${{ env.RESOURCE_GROUP_NAME }} --server ${{ env.RESOURCE_GROUP_NAME }}.azurecr.io
           
-          az containerapp update -n inventory -g ${{ env.RESOURCE_GROUP_NAME }} -i ${{ env.RESOURCE_GROUP_NAME }}.azurecr.io/${{ env.PAYMENT_IMAGE }}:${{ github.sha }}
+          az containerapp update -n ${{ env.PAYMENT_IMAGE }} -g ${{ env.RESOURCE_GROUP_NAME }} -i ${{ env.RESOURCE_GROUP_NAME }}.azurecr.io/${{ env.PAYMENT_IMAGE }}:${{ github.sha }}
           
-          az containerapp registry set -n store -g ${{ env.RESOURCE_GROUP_NAME }} --server ${{ env.RESOURCE_GROUP_NAME }}.azurecr.io
+          az containerapp registry set -n ${{ env.AVENGERS_IMAGE }} -g ${{ env.RESOURCE_GROUP_NAME }} --server ${{ env.RESOURCE_GROUP_NAME }}.azurecr.io
           
-          az containerapp update -n store -g ${{ env.RESOURCE_GROUP_NAME }} -i ${{ env.RESOURCE_GROUP_NAME }}.azurecr.io/${{ env.AVENGERS_IMAGE }}:${{ github.sha }}
+          az containerapp update -n ${{ env.AVENGERS_IMAGE }} -g ${{ env.RESOURCE_GROUP_NAME }} -i ${{ env.RESOURCE_GROUP_NAME }}.azurecr.io/${{ env.AVENGERS_IMAGE }}:${{ github.sha }}
 
     - name: logout
       run: >
