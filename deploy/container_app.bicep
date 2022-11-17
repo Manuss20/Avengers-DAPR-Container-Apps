@@ -11,13 +11,17 @@ param externalIngress bool = false
 param allowInsecure bool = true
 param transport string = 'http'
 param appProtocol string = 'http'
-param registryUserName string
-@secure()
-param registryPassword string
+param uaiId string
 
 resource containerApp 'Microsoft.App/containerApps@2022-03-01' = {
   name: name
   location: location
+  identity: {
+    type: 'UserAssigned'
+    userAssignedIdentities: {
+      '${uaiId}': {}
+    }
+  }
   properties: {
     managedEnvironmentId: containerAppEnviromentId
     configuration: {
@@ -37,8 +41,7 @@ resource containerApp 'Microsoft.App/containerApps@2022-03-01' = {
       registries: [
         {
           server: registry
-          username: registryUserName
-          passwordSecretRef: 'container-registry-password'
+          identity: uaiId
         }
       ]
       ingress: {

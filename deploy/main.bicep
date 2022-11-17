@@ -1,5 +1,7 @@
 param location string = resourceGroup().location
 
+var acrPullRole = resourceId('Microsoft.Authorization/roleDefinitions', '7f951dda-4ed3-4680-a7ca-43fe172d538d')
+
 // Creation of the Azure Container Registry
 resource acr 'Microsoft.ContainerRegistry/registries@2021-09-01' = {
   name: toLower('${resourceGroup().name}')
@@ -10,6 +12,21 @@ resource acr 'Microsoft.ContainerRegistry/registries@2021-09-01' = {
   properties: {
     adminUserEnabled: true
     publicNetworkAccess: 'Enabled'
+  }
+}
+
+resource uai 'Microsoft.ManagedIdentity/userAssignedIdentities@2022-01-31-preview' = {
+  name: 'id-${containerAppName}'
+  location: location
+}
+
+@description('This allows the managed identity of the container app to access the registry, note scope is applied to the wider ResourceGroup not the ACR')
+resource uaiRbac 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
+  name: guid(resourceGroup().id, uai.id, acrPullRole)
+  properties: {
+    roleDefinitionId: acrPullRole
+    principalId: uai.properties.principalId
+    principalType: 'ServicePrincipal'
   }
 }
 
@@ -42,8 +59,7 @@ module missions 'container_app.bicep' = {
   params: {
     name: 'missions'
     location: location
-    registryUserName: acr.listCredentials().username
-    registryPassword: acr.listCredentials().passwords[0].value
+    uaiId: uai.id
     containerAppEnviromentId: env.outputs.id
     registry: acr.name
     envVars: shared_config
@@ -57,8 +73,7 @@ module payment 'container_app.bicep' = {
   params: {
     name: 'payment'
     location: location
-    registryUserName: acr.listCredentials().username
-    registryPassword: acr.listCredentials().passwords[0].value
+    uaiId: uai.id
     containerAppEnviromentId: env.outputs.id
     registry: acr.name
     envVars: shared_config
@@ -72,8 +87,7 @@ module avengers 'container_app.bicep' = {
   params: {
     name: 'avengers'
     location: location
-    registryUserName: acr.listCredentials().username
-    registryPassword: acr.listCredentials().passwords[0].value
+    uaiId: uai.id
     containerAppEnviromentId: env.outputs.id
     registry: acr.name
     envVars: shared_config
