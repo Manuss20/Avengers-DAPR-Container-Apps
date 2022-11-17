@@ -16,7 +16,7 @@ resource acr 'Microsoft.ContainerRegistry/registries@2021-09-01' = {
 }
 
 resource uai 'Microsoft.ManagedIdentity/userAssignedIdentities@2022-01-31-preview' = {
-  name: 'id-${containerAppName}'
+  name: 'id-avengers'
   location: location
 }
 
