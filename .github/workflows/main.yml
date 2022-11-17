@@ -8,7 +8,7 @@ on:
 env:
   
   # alphanumeric string under 14 characters
-  RESOURCE_GROUP_NAME: avengersdmad
+  RESOURCE_GROUP_NAME: avengsrstst23
 
   # specify your preferred region
   REGION: westeurope
@@ -39,7 +39,8 @@ jobs:
     - name: Create resource group
       uses: azure/CLI@v1
       with:
-        inlineScript: >
+        azcliversion: 2.30.0
+        inlineScript: |
           echo "Creating resource group in Azure"
           echo "Executing 'az group create -l ${{ env.REGION }} -n ${{ env.RESOURCE_GROUP_NAME }}'"
           az group create -l ${{ env.REGION }} -n ${{ env.RESOURCE_GROUP_NAME }}
