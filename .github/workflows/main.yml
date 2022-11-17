@@ -8,7 +8,7 @@ on:
 env:
   
   # alphanumeric string under 14 characters
-  RESOURCE_GROUP_NAME: avengsrstst23
+  RESOURCE_GROUP_NAME: avengsrstst99
 
   # specify your preferred region
   REGION: westeurope
@@ -117,6 +117,7 @@ jobs:
       with:
         inlineScript: >
           az config set extension.use_dynamic_install=yes_without_prompt
+
           az extension add --name containerapp --yes
     
     - name: Login to ACR
