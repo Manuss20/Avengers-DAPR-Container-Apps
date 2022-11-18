@@ -110,12 +110,12 @@ jobs:
         run: |
           mid=$(az identity show -n id-avengers --resource-group ${{ env.RESOURCE_GROUP_NAME }} | jq -r .id)
           az config set extension.use_dynamic_install=yes_without_prompt
-          az containerapp registry set -n missions -g ${{ env.RESOURCE_GROUP_NAME }} --server ${{ env.RESOURCE_GROUP_NAME }}.azurecr.io --identity $mid
-          az containerapp registry set -n payment -g ${{ env.RESOURCE_GROUP_NAME }} --server ${{ env.RESOURCE_GROUP_NAME }}.azurecr.io --identity $mid
-          az containerapp registry set -n avengers -g ${{ env.RESOURCE_GROUP_NAME }} --server ${{ env.RESOURCE_GROUP_NAME }}.azurecr.io --identity $mid
-          az containerapp update -n missions -g ${{ env.RESOURCE_GROUP_NAME }} -i ${{ env.RESOURCE_GROUP_NAME }}.azurecr.io/${{ env.MISSION_IMAGE }}:${{ github.sha }}
-          az containerapp update -n payment -g ${{ env.RESOURCE_GROUP_NAME }} -i ${{ env.RESOURCE_GROUP_NAME }}.azurecr.io/${{ env.PAYMENT_IMAGE }}:${{ github.sha }}
-          az containerapp update -n avengers -g ${{ env.RESOURCE_GROUP_NAME }} -i ${{ env.RESOURCE_GROUP_NAME }}.azurecr.io/${{ env.AVENGERS_IMAGE }}:${{ github.sha }}
+          az containerapp registry set -n ${{ env.MISSION_IMAGE }} -g ${{ env.RESOURCE_GROUP_NAME }} --server ${{ env.RESOURCE_GROUP_NAME }}.azurecr.io --identity $mid
+          az containerapp registry set -n ${{ env.PAYMENT_IMAGE }} -g ${{ env.RESOURCE_GROUP_NAME }} --server ${{ env.RESOURCE_GROUP_NAME }}.azurecr.io --identity $mid
+          az containerapp registry set -n ${{ env.AVENGERS_IMAGE }} -g ${{ env.RESOURCE_GROUP_NAME }} --server ${{ env.RESOURCE_GROUP_NAME }}.azurecr.io --identity $mid
+          az containerapp update -n ${{ env.MISSION_IMAGE }} -g ${{ env.RESOURCE_GROUP_NAME }} -i ${{ env.RESOURCE_GROUP_NAME }}.azurecr.io/${{ env.MISSION_IMAGE }}:${{ github.sha }}
+          az containerapp update -n ${{ env.PAYMENT_IMAGE }} -g ${{ env.RESOURCE_GROUP_NAME }} -i ${{ env.RESOURCE_GROUP_NAME }}.azurecr.io/${{ env.PAYMENT_IMAGE }}:${{ github.sha }}
+          az containerapp update -n ${{ env.AVENGERS_IMAGE }} -g ${{ env.RESOURCE_GROUP_NAME }} -i ${{ env.RESOURCE_GROUP_NAME }}.azurecr.io/${{ env.AVENGERS_IMAGE }}:${{ github.sha }}
       
       - name: logout
         run: |
