@@ -1,3 +1,5 @@
+[![Build and deploy .NET application to Azure Container App](https://github.com/Manuss20/Avengers-DAPR-Container-Apps/actions/workflows/main.yml/badge.svg)](https://github.com/Manuss20/Avengers-DAPR-Container-Apps/actions/workflows/main.yml)
+
 # Avengers-DAPR-Container-Apps
 
 <p>Avengers Mission Control Sample Application.</p>
