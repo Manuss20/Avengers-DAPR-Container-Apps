@@ -26,11 +26,11 @@ resource appInsights 'Microsoft.Insights/components@2020-02-02' = {
   }
 }
 
-resource env 'Microsoft.App/managedEnvironments@2022-03-01' = {
+resource env 'Microsoft.App/managedEnvironments@2022-06-01' = {
   name: '${baseName}env'
   location: location
   properties: {
-    daprAIInstrumentationKey: appInsights.properties.InstrumentationKey
+    daprAIConnectionString: insights.properties.ConnectionString
     appLogsConfiguration: {
       destination: 'log-analytics'
       logAnalyticsConfiguration: {
