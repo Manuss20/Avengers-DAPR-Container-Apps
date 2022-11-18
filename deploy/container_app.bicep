@@ -35,10 +35,6 @@ resource containerApp 'Microsoft.App/containerApps@2022-03-01' = {
       secrets: [
       ]
       registries: [
-        {
-          server: registry
-          identity: uaiId
-        }
       ]
       ingress: {
         external: externalIngress
