@@ -3,7 +3,6 @@ param location string = resourceGroup().location
 param containerAppEnviromentId string
 param repositoryImage string = 'mcr.microsoft.com/azuredocs/containerapps-helloworld:latest'
 param envVars array = []
-param registry string
 param minReplicas int = 1
 param maxReplicas int = 1
 param port int = 80

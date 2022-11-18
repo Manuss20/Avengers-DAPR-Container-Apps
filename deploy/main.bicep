@@ -61,7 +61,6 @@ module missions 'container_app.bicep' = {
     location: location
     uaiId: uai.id
     containerAppEnviromentId: env.outputs.id
-    registry: acr.name
     envVars: shared_config
     externalIngress: false
   }
@@ -75,7 +74,6 @@ module payment 'container_app.bicep' = {
     location: location
     uaiId: uai.id
     containerAppEnviromentId: env.outputs.id
-    registry: acr.name
     envVars: shared_config
     externalIngress: false
   }
@@ -89,7 +87,6 @@ module avengers 'container_app.bicep' = {
     location: location
     uaiId: uai.id
     containerAppEnviromentId: env.outputs.id
-    registry: acr.name
     envVars: shared_config
     externalIngress: true
   }

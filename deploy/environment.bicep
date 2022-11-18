@@ -30,7 +30,7 @@ resource env 'Microsoft.App/managedEnvironments@2022-06-01-preview' = {
   name: '${baseName}env'
   location: location
   properties: {
-    daprAIConnectionString: insights.properties.ConnectionString
+    daprAIConnectionString: appInsights.properties.ConnectionString
     appLogsConfiguration: {
       destination: 'log-analytics'
       logAnalyticsConfiguration: {
