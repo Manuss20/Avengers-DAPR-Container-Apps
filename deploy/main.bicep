@@ -63,7 +63,7 @@ module missions 'container_app.bicep' = {
     containerAppEnviromentId: env.outputs.id
     registry: acr.name
     envVars: shared_config
-    externalIngress: true
+    externalIngress: false
   }
 }
 
@@ -77,7 +77,7 @@ module payment 'container_app.bicep' = {
     containerAppEnviromentId: env.outputs.id
     registry: acr.name
     envVars: shared_config
-    externalIngress: true
+    externalIngress: false
   }
 }
 
